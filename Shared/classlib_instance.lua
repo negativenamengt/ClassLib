@@ -33,6 +33,11 @@ local function allocateID(oClass, __iSyncID)
     end
 
     local tMT = getmetatable(oClass)
+    local tSuperMT = getmetatable(tMT.__super)
+    if Server and tSuperMT.__use_hierarchy_pool then
+        tMT = tSuperMT
+    end
+
     if Server or tMT.__use_global_pool then
         tMT.__last_id = (tMT.__last_id + 1)
         return tMT.__last_id
@@ -87,6 +92,11 @@ function ClassLib.NewInstance(oClass, __iSyncID, ...)
     local iAllocatedID = allocateID(oClass, __iSyncID)
     ClassLib.SetValue(oInstance, "id", iAllocatedID)
 
+    local tSuperMT = getmetatable(tClassMT.__super)
+    if tSuperMT and tSuperMT.__use_hierarchy_pool then
+        tSuperMT.__instances_map[iAllocatedID] = oInstance
+    end
+
     if rawget(oClass, "Constructor") then
         rawget(oClass, "Constructor")(oInstance, ...)
     end
@@ -137,6 +147,11 @@ function ClassLib.Destroy(oInstance, ...)
     end
     tClassMT.__instances = tNewList
     tClassMT.__instances_map[iID] = nil
+
+    local tSuperMT = getmetatable(tClassMT.__super)
+    if tSuperMT and tSuperMT.__use_hierarchy_pool then
+        tSuperMT.__instances_map[iID] = nil
+    end
 
     -- Clear singleton
     if ClassLib.HasFlag(tClassMT.__flags, ClassLib.FL.Singleton) then

@@ -61,6 +61,7 @@ function ClassLib.Inherit(oInheritFrom, sClassName, iFlags)
 
     local bReplicateToAll = ClassLib.HasFlag(iFlags, ClassLib.FL.Replicated)
     local bUseGlobalPool = (not bReplicateToAll) and ClassLib.HasFlag(iFlags, ClassLib.FL.GlobalPool)
+    local bUseHierarchyPool = ClassLib.HasFlag(iFlags, ClassLib.FL.HierarchyPool)
 
     local tFromMT = getmetatable(oInheritFrom)
 
@@ -80,6 +81,7 @@ function ClassLib.Inherit(oInheritFrom, sClassName, iFlags)
     tNewMT.__last_id = 0
     tNewMT.__last_client_id = 0
     tNewMT.__use_global_pool = bUseGlobalPool
+    tNewMT.__use_hierarchy_pool = bUseHierarchyPool
     tNewMT.__replicate_to_all = bReplicateToAll
     tNewMT.__inherited_classes = {}
     tNewMT.__flags = (iFlags or 0)

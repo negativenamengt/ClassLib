@@ -14,11 +14,13 @@ local getmetatable = getmetatable
 ---- `GlobalPool` (2) - Use a shared ID space (usefull for instances created on the shared-side without any sync, keeps consistent IDs between server/client)
 ---- `Singleton` (3) - Only allow one instance of the class to exist at a time
 ---- `ServerAuthority` (4) - Only allow the server to create instances of the class
+---- `HierarchyPool` (5) - Use a shared ID space per class hierarchy
 ClassLib.FL = {
     Replicated = 1,
     GlobalPool = 2,
     Singleton = 4,
-    ServerAuthority = 8
+    ServerAuthority = 8,
+    HierarchyPool = 16
     -- 16, 32, 64, 128, 256, 512, etc..
 }
 
