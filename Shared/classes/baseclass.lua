@@ -76,7 +76,7 @@ end
 ---Clones the instance, and return a new instance with the same values (except it's ID)
 ---@param tIgnoredKeys? table @The properties to ignore (sequential table)
 ---@param ... any @The arguments to pass to the constructor
----@return table @The new instance
+---@return self @The new instance
 function BaseClass:Clone(tIgnoredKeys, ...)
     return ClassLib.Clone(self, tIgnoredKeys, ...)
 end
@@ -152,7 +152,7 @@ end
 ---`🔸 Client`<br>`🔹 Server`<br>
 ---Returns the instance of this class from the instance unique ID
 ---@param iID integer @The ID of the instance
----@return table? @The instance, or nil if it doesn't exist
+---@return BaseClass? @The instance, or nil if it doesn't exist
 function BaseClass.GetByID(iID)
     return {}
 end
@@ -203,11 +203,11 @@ end
 ---Subscribes to an Event on the Class
 ---@param sEvent string @The name of the event to listen to
 ---@param callback function @The callback to call when the event is triggered, return false to unsubscribe from the event
----@overload fun(self: BaseClass, sEvent: "Spawn", callback: fun(self: BaseClass))
----@overload fun(self: BaseClass, sEvent: "Destroy", callback: fun(self: BaseClass))
----@overload fun(self: BaseClass, sEvent: "ValueChange", callback: fun(self: BaseClass, sKey: string, xValue: any))
----@overload fun(self: BaseClass, sEvent: "ClassRegister", callback: fun(oInheritedClass: table))
----@overload fun(self: BaseClass, sEvent: "ReplicatedPlayerChange", callback: fun(oInheritedClass: table, oPlayer: Player, bAdded: boolean))
+---@overload fun(sEvent: "Spawn", callback: fun(self: BaseClass))
+---@overload fun(sEvent: "Destroy", callback: fun(self: BaseClass))
+---@overload fun(sEvent: "ValueChange", callback: fun(self: BaseClass, sKey: string, xValue: any))
+---@overload fun(sEvent: "ClassRegister", callback: fun(oInheritedClass: table))
+---@overload fun(sEvent: "ReplicatedPlayerChange", callback: fun(oInheritedClass: table, oPlayer: Player, bAdded: boolean))
 ---@return function? @The callback
 function BaseClass.ClassSubscribe(sEvent, callback)
     return ClassLib.Subscribe(BaseClass, sEvent, callback)
@@ -364,10 +364,10 @@ if Server then
 
     ---`🔹 Server`<br>
     ---Removes a player from replicating the instance to
-    ---@param pPly Player @The player to remove
+    ---@param xPly Player|"*"|table<Player>  @The player to remove
     ---@return boolean @Whether the player was removed
-    function BaseClass:RemoveReplicatedPlayer(pPly)
-        return ClassLib.RemoveReplicatedPlayer(self, pPly)
+    function BaseClass:RemoveReplicatedPlayer(xPly)
+        return ClassLib.RemoveReplicatedPlayer(self, xPly)
     end
 
     ---`🔹 Server`<br>

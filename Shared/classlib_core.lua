@@ -120,7 +120,7 @@ end
 ---`🔸 Client`<br>`🔹 Server`<br>
 ---Returns a class object by its name
 ---@param sClassName string @The name of the class
----@return table? @The class
+---@return BaseClass? @The class
 function ClassLib.GetClassByName(sClassName)
     return ClassLib.__classmap[sClassName]
 end

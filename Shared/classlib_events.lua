@@ -96,7 +96,7 @@ if Client then
         local tClassMT = getmetatable(tClass)
         local tRemoteEvents = tClassMT.__remote_events
         if not tRemoteEvents or not tRemoteEvents[sEvent] then return end
-
+    
         local oInstance = tClassMT.__instances_map[iID]
         local tArgs = ClassLib.ParseArgs(...)
         if oInstance then
@@ -158,6 +158,7 @@ elseif Server then
         if not sClass then return end
 
         local tArgs = ClassLib.SerializeArgs(...)
+
         Events.BroadcastRemote(ClassLib.EventMap.SVToCL, sClass, oInstance:GetID(), sEvent, table.unpack(tArgs))
     end
 
